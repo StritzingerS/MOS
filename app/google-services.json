@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "977985304760",
+    "firebase_url": "https://mobilesports-24032.firebaseio.com",
+    "project_id": "mobilesports-24032",
+    "storage_bucket": "mobilesports-24032.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:977985304760:android:bd0666c34e6ad544",
+        "android_client_info": {
+          "package_name": "at.fhooe.mc.mos"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "977985304760-54lkb5ms1b2a8o4s9vakbcapd9cb7b38.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "at.fhooe.mc.mos",
+            "certificate_hash": "8047DA5596F511565C7A3BA7B33E1DA421CB9F44"
+          }
+        },
+        {
+          "client_id": "977985304760-sti8o5viiqovksj2bdou5ajo9a5nqan2.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB48hCaR_03PTxRwEr-flnwVWbc3o0oxxY"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "977985304760-sti8o5viiqovksj2bdou5ajo9a5nqan2.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
