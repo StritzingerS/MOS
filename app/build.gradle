@@ -4,6 +4,17 @@ android {
     compileSdkVersion 24
     buildToolsVersion "23.0.3"
 
+    signingConfigs {
+        debug {
+            // one debug keystore for all developers, to enable authentication
+            // Firebase SHA1-fingerprint is from this one
+            storeFile file('keystore/debug.keystore')
+            storePassword "android"
+            keyAlias "androiddebugkey"
+            keyPassword "android"
+        }
+    }
+
     defaultConfig {
         applicationId "at.fhooe.mc.mos"
         minSdkVersion 19
@@ -12,6 +23,10 @@ android {
         versionName "1.0"
     }
     buildTypes {
+        debug {
+            signingConfig signingConfigs.debug
+        }
+
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
