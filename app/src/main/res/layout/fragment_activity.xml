@@ -1,12 +1,40 @@
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:CircleProgressView="http://schemas.android.com/apk/res-auto"
     tools:context="at.fhooe.mc.mos.ui.ActivityFragment">
 
-    <Button
-        android:id="@+id/btn_activity_send"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Send random steps" />
-</FrameLayout>
+        android:orientation="vertical">
+
+        <at.grabner.circleprogress.CircleProgressView
+            android:layout_gravity="center"
+            android:id="@+id/circleView"
+            android:layout_width="200dp"
+            android:layout_height="200dp"
+            CircleProgressView:cpv_autoTextSize="true"
+            CircleProgressView:cpv_barColor="@color/primary"
+            CircleProgressView:cpv_barWidth="20dp"
+            CircleProgressView:cpv_innerContourSize="0dp"
+            CircleProgressView:cpv_outerContourSize="0dp"
+            CircleProgressView:cpv_rimColor="@color/primary_light"
+            CircleProgressView:cpv_rimWidth="25dp"
+            CircleProgressView:cpv_spinColor="@color/primary"
+            CircleProgressView:cpv_textColor="@color/primary_dark"
+            CircleProgressView:cpv_textScale="1"
+            CircleProgressView:cpv_unitColor="@color/primary_light"
+            CircleProgressView:cpv_unitPosition="right_top"
+            CircleProgressView:cpv_unitScale="1" />
+
+            <Button
+            android:id="@+id/btn_activity_send"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Send random steps" />
+
+    </LinearLayout>
+
+</LinearLayout>

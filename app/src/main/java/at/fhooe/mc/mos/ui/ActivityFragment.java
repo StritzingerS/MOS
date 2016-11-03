@@ -3,6 +3,7 @@ package at.fhooe.mc.mos.ui;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,13 +17,20 @@ import com.google.firebase.database.FirebaseDatabase;
 
 import at.fhooe.mc.mos.R;
 import at.fhooe.mc.mos.model.Step;
+import at.grabner.circleprogress.CircleProgressView;
+import at.grabner.circleprogress.TextMode;
 
 
 public class ActivityFragment extends Fragment {
 
+    private static final String TAG = ActivityFragment.class.getSimpleName();
+
     private View mView;
     private Button mBtnSend;
     private DatabaseReference mFirebaseDatabaseReference;
+
+    private CircleProgressView mCircleView;
+
 
     public ActivityFragment() {
         // Required empty public constructor
@@ -70,6 +78,26 @@ public class ActivityFragment extends Fragment {
                 });
             }
         });
+
+        // set up circular view
+        mCircleView = (CircleProgressView) mView.findViewById(R.id.circleView);
+        mCircleView.setMaxValue(100);
+
+        mCircleView.setUnit("/ 100");
+        mCircleView.setUnitVisible(true);
+
+        mCircleView.setTextMode(TextMode.VALUE); // Set text mode to text to show text
+
+        mCircleView.setOnProgressChangedListener(new CircleProgressView.OnProgressChangedListener() {
+            @Override
+            public void onProgressChanged(float value) {
+                Log.d(TAG, "Progress Changed: " + value);
+            }
+        });
+
+        mCircleView.setValueAnimated(42);
+
+
 
         return mView;
     }
