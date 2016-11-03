@@ -120,7 +120,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
                 // fragmentClass = SecondFragment.class;
                 break;
             case R.id.nav_settings:
-                // fragmentClass = ThirdFragment.class;
+                fragmentClass = SettingsFragment.class;
                 break;
             case R.id.nav_logout:
                 mFirebaseAuth.signOut();
