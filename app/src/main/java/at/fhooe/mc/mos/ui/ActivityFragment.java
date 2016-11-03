@@ -2,6 +2,7 @@ package at.fhooe.mc.mos.ui;
 
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.Log;
@@ -9,6 +10,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
@@ -70,7 +72,8 @@ public class ActivityFragment extends Fragment implements PedometerObserver, Vie
         mFirebaseDatabaseReference = FirebaseDatabase.getInstance().getReference().child("users").child(uid).child("steps");
 
         // Circular View
-        int maxSteps = 100;
+        int maxSteps = getMaxSteps();
+
         mCircleView = (CircleProgressView) mView.findViewById(R.id.circleView);
         mCircleView.setMaxValue(maxSteps);
 
@@ -95,6 +98,16 @@ public class ActivityFragment extends Fragment implements PedometerObserver, Vie
         mBtnStop.setOnClickListener(this);
 
         return mView;
+    }
+
+    private int getMaxSteps() {
+
+        SharedPreferences prefs = getContext().getSharedPreferences(SettingsFragment.MY_PREFS, getContext().MODE_PRIVATE);
+        int maxSteps = prefs.getInt(SettingsFragment.KEY_MAX_STEPS, 0);
+        if (maxSteps == 0) {
+            maxSteps = 100;
+        }
+        return maxSteps;
     }
 
     @Override
