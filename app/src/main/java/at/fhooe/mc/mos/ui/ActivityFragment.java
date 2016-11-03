@@ -75,6 +75,10 @@ public class ActivityFragment extends Fragment implements PedometerObserver, Vie
         int maxSteps = getMaxSteps();
 
         mCircleView = (CircleProgressView) mView.findViewById(R.id.circleView);
+
+        // gradient
+        mCircleView.setBarColor(getResources().getColor(R.color.red), getResources().getColor(R.color.green));
+
         mCircleView.setMaxValue(maxSteps);
 
         mCircleView.setUnit("/ " + maxSteps);
