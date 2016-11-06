@@ -6,7 +6,7 @@ import android.support.v7.preference.PreferenceFragmentCompat;
 import at.fhooe.mc.mos.R;
 
 /**
- * Created by Oliver on 06.11.2016.
+ * Fragment which shows and can edit basic settings for this app.
  */
 public class SettingsFragment extends PreferenceFragmentCompat {
 

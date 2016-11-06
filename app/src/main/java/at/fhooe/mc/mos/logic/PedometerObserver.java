@@ -1,7 +1,7 @@
 package at.fhooe.mc.mos.logic;
 
 /**
- * Created by Oliver on 03.11.2016.
+ * Interface to notify any observer about the pedometer.
  */
 public interface PedometerObserver {
     void stepDetected();

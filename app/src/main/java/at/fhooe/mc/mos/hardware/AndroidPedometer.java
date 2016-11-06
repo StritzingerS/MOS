@@ -1,4 +1,4 @@
-package at.fhooe.mc.mos.logic;
+package at.fhooe.mc.mos.hardware;
 
 import android.content.Context;
 import android.hardware.Sensor;
@@ -9,13 +9,15 @@ import android.hardware.SensorManager;
 import java.util.ArrayList;
 import java.util.List;
 
+import at.fhooe.mc.mos.logic.PedometerObserver;
+
 /**
- * Custom pedometer which informs the observers with the current steps taken.
+ * Custom pedometer which informs the observers with about every new step.
  * Use 'getInstance(...)' to access pedometer.
  */
-public class Pedometer implements SensorEventListener {
+public class AndroidPedometer implements Pedometer, SensorEventListener {
 
-    private static Pedometer INSTANCE;
+    private static AndroidPedometer INSTANCE;
 
     private List<PedometerObserver> mObservers;
     private Context mContext;
@@ -34,14 +36,14 @@ public class Pedometer implements SensorEventListener {
     long mLastStep = System.currentTimeMillis();
     long mLastSensorUpdate = System.currentTimeMillis();
 
-    public static Pedometer getInstance(Context context) {
+    public static AndroidPedometer getInstance(Context context) {
         if (INSTANCE == null) {
-            INSTANCE = new Pedometer(context);
+            INSTANCE = new AndroidPedometer(context);
         }
         return INSTANCE;
     }
 
-    private Pedometer(Context context) {
+    private AndroidPedometer(Context context) {
         mObservers = new ArrayList<>();
         mContext = context;
 

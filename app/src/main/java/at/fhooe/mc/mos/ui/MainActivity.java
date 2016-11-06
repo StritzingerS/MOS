@@ -22,7 +22,9 @@ import com.google.firebase.auth.FirebaseUser;
 
 import at.fhooe.mc.mos.R;
 
-
+/**
+ * Handles basic navigation inside app.
+ */
 public class MainActivity extends AppCompatActivity implements GoogleApiClient.OnConnectionFailedListener {
 
     private static final String TAG = MainActivity.class.getSimpleName();

@@ -6,7 +6,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * Created by Oliver on 13.10.2016.
+ * Simple model of a step for testing purposes.
  */
 public class Step {
     private int count;

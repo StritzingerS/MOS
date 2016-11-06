@@ -25,6 +25,9 @@ import com.google.firebase.auth.GoogleAuthProvider;
 
 import at.fhooe.mc.mos.R;
 
+/**
+ * Activity for signing in with an specific account.
+ */
 public class SignInActivity extends AppCompatActivity implements GoogleApiClient.OnConnectionFailedListener,
         View.OnClickListener {
 

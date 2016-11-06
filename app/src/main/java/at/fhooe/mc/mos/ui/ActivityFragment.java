@@ -14,31 +14,29 @@ import android.widget.Button;
 import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
 import at.fhooe.mc.mos.R;
-import at.fhooe.mc.mos.logic.Pedometer;
-import at.fhooe.mc.mos.logic.PedometerObserver;
-import at.fhooe.mc.mos.model.Step;
+import at.fhooe.mc.mos.hardware.AndroidPedometer;
+import at.fhooe.mc.mos.logic.StepManager;
 import at.grabner.circleprogress.CircleProgressView;
 import at.grabner.circleprogress.TextMode;
 
-
-public class ActivityFragment extends Fragment implements PedometerObserver, View.OnClickListener {
+/**
+ * Fragment for starting and stopping a activity session.
+ */
+public class ActivityFragment extends Fragment implements PedometerView, View.OnClickListener {
 
     private static final String TAG = ActivityFragment.class.getSimpleName();
 
     private View mView;
     private Button mBtnStart;
     private Button mBtnStop;
-    private DatabaseReference mFirebaseDatabaseReference;
+
 
     private CircleProgressView mCircleView;
-    private Pedometer mPedometer;
-    private int mCurrentSteps;
-
+    private StepManager mStepManager;
 
     public ActivityFragment() {
         // Required empty public constructor
@@ -58,7 +56,11 @@ public class ActivityFragment extends Fragment implements PedometerObserver, Vie
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-
+        // Connection to Firebase
+        String uid = FirebaseAuth.getInstance().getCurrentUser().getUid();
+        DatabaseReference databaseRef = FirebaseDatabase.getInstance().getReference().child("users").child(uid).child("steps");
+        // needs application context to prevent memory leaks
+        mStepManager = new StepManager(this, AndroidPedometer.getInstance(getActivity().getApplicationContext()), databaseRef);
     }
 
     @Override
@@ -67,9 +69,6 @@ public class ActivityFragment extends Fragment implements PedometerObserver, Vie
         // Inflate the layout for this fragment
         mView = inflater.inflate(R.layout.fragment_activity, container, false);
 
-        // Connection to Firebase
-        String uid = FirebaseAuth.getInstance().getCurrentUser().getUid();
-        mFirebaseDatabaseReference = FirebaseDatabase.getInstance().getReference().child("users").child(uid).child("steps");
 
         // Circular View
         int maxSteps = getMaxSteps();
@@ -87,12 +86,14 @@ public class ActivityFragment extends Fragment implements PedometerObserver, Vie
         mCircleView.setTextMode(TextMode.VALUE); // Set text mode to text to show text
         mCircleView.setValueAnimated(0);
 
+        /*
         mCircleView.setOnProgressChangedListener(new CircleProgressView.OnProgressChangedListener() {
             @Override
             public void onProgressChanged(float value) {
                 Log.d(TAG, "Progress Changed: " + value);
             }
         });
+        */
 
         // Buttons
         mBtnStart = (Button) mView.findViewById(R.id.btn_activity_start);
@@ -116,42 +117,13 @@ public class ActivityFragment extends Fragment implements PedometerObserver, Vie
         return maxSteps;
     }
 
-    @Override
-    public void onPause() {
-        super.onPause();
-
-        if (mPedometer != null) {
-            mPedometer.removeObserver(this);
-        }
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-
-        if (mPedometer != null) {
-            mPedometer.addObserver(this);
-        }
-    }
-
-    private void setUpPedometer(Context context) {
-        mPedometer = Pedometer.getInstance(context);
-        mPedometer.addObserver(this);
-    }
-
-
-    @Override
-    public void stepDetected() {
-        mCurrentSteps++;
-        mCircleView.setValueAnimated(mCurrentSteps);
-    }
 
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
 
             case R.id.btn_activity_start:
-                setUpPedometer(v.getContext());
+                mStepManager.startCounting();
                 mBtnStart.setEnabled(false);
                 mBtnStop.setEnabled(true);
 
@@ -159,9 +131,11 @@ public class ActivityFragment extends Fragment implements PedometerObserver, Vie
             case R.id.btn_activity_stop:
                 mBtnStart.setEnabled(false);
                 mBtnStop.setEnabled(false);
-                mPedometer.removeObserver(this);
 
-                saveData();
+                mStepManager.stopCounter();
+
+                // saving online
+                mStepManager.saveData();
 
                 break;
             default:
@@ -169,32 +143,29 @@ public class ActivityFragment extends Fragment implements PedometerObserver, Vie
         }
     }
 
-    /**
-     * Saves data online.
-     */
-    private void saveData() {
 
-        Step step = new Step();
-        step.setCount(mCurrentSteps);
+    @Override
+    public void currentSteps(int currentSteps) {
+        mCircleView.setValueAnimated(currentSteps);
+    }
 
-        // push new value
-        mFirebaseDatabaseReference.push().setValue(step, new DatabaseReference.CompletionListener() {
-            @Override
-            public void onComplete(DatabaseError databaseError, DatabaseReference databaseReference) {
-                if (databaseError == null) {
-                    Toast.makeText(getContext(), "Data saved online", Toast.LENGTH_LONG).show();
-                } else {
-                    Toast.makeText(getContext(), "Error saving data: " + databaseError.getMessage(), Toast.LENGTH_LONG).show();
-                }
+    @Override
+    public void dataSaved(boolean success) {
+        if (success) {
+            Toast.makeText(getContext(), "Data saved online", Toast.LENGTH_LONG).show();
+        } else {
+            Toast.makeText(getContext(), "Error saving data", Toast.LENGTH_LONG).show();
+        }
 
-                // enable button
-                mBtnStart.setEnabled(true);
-                mBtnStop.setEnabled(false);
+        // TODO: handle errors
+        // treat as success for now...
+        mStepManager.resetCounter();
 
-                // reset
-                mCurrentSteps = 0;
-                mCircleView.setValueAnimated(0);
-            }
-        });
+        // enable button
+        mBtnStart.setEnabled(true);
+        mBtnStop.setEnabled(false);
+
+        // reset view
+        mCircleView.setValueAnimated(0);
     }
 }
