@@ -5,12 +5,12 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v7.preference.PreferenceManager;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
@@ -105,9 +105,11 @@ public class ActivityFragment extends Fragment implements PedometerObserver, Vie
     }
 
     private int getMaxSteps() {
+        SharedPreferences prefs = PreferenceManager
+                .getDefaultSharedPreferences(getContext());
 
-        SharedPreferences prefs = getContext().getSharedPreferences(SettingsFragment.MY_PREFS, getContext().MODE_PRIVATE);
-        int maxSteps = prefs.getInt(SettingsFragment.KEY_MAX_STEPS, 0);
+        // SharedPreferences prefs = getContext().getSharedPreferences(SettingsActivity.MY_PREFS, getContext().MODE_PRIVATE);
+        int maxSteps = Integer.parseInt(prefs.getString("keyMaxSteps", "0"));
         if (maxSteps == 0) {
             maxSteps = 100;
         }

@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <PreferenceCategory
+        android:title="Goals">
+        <EditTextPreference
+            android:title="Steps"
+            android:key="keyMaxSteps"
+            android:summary="Set the maximum steps you want to reach per activity"
+            android:numeric="integer">
+        </EditTextPreference>
+    </PreferenceCategory>
+
+    <PreferenceCategory
+        android:title="Personal data">
+        <EditTextPreference
+            android:title="Age"
+            android:key="keyAge"
+            android:summary="Set age in years"
+            android:numeric="integer" />
+        <ListPreference
+            android:title="Gender"
+            android:key="keyGender"
+            android:entries="@array/gender"
+            android:entryValues="@array/gender" />
+        <EditTextPreference
+            android:title="Height"
+            android:key="keyHeight"
+            android:summary="Set height in meters"
+            android:numeric="integer" />
+        <EditTextPreference
+            android:title="Weight"
+            android:key="keyWeight"
+            android:summary="Set weight in kilograms"
+            android:numeric="integer" />
+    </PreferenceCategory>
+</PreferenceScreen>

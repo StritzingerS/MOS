@@ -82,15 +82,18 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
             // Setup drawer view
             setupDrawerContent(nvDrawer);
 
+
             try {
                 // standard fragment
                 replaceFragment(ActivityFragment.class);
-                setTitle(R.string.standard_fragment_title);
+                setTitle(R.string.fragment_activity_title);
             } catch (IllegalAccessException e) {
                 e.printStackTrace();
             } catch (InstantiationException e) {
                 e.printStackTrace();
             }
+
+
         }
     }
 
@@ -132,8 +135,6 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
             default:
                 fragmentClass = ActivityFragment.class;
         }
-
-
 
         try {
             replaceFragment(fragmentClass);
