@@ -1,5 +1,6 @@
 package at.fhooe.mc.mos.ui;
 
+import android.Manifest;
 import android.app.Activity;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothManager;
@@ -9,9 +10,12 @@ import android.content.Intent;
 import android.content.ServiceConnection;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.IBinder;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.preference.PreferenceManager;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -24,6 +28,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
+import at.fhooe.mc.mos.BuildConfig;
 import at.fhooe.mc.mos.R;
 import at.fhooe.mc.mos.hardware.AndroidPedometer;
 import at.fhooe.mc.mos.hardware.BluetoothService;
@@ -38,6 +43,7 @@ import at.grabner.circleprogress.TextMode;
 public class ActivityFragment extends Fragment implements PedometerView, HeartRateView, View.OnClickListener {
 
     private static final String TAG = ActivityFragment.class.getSimpleName();
+    private static final int PERMISSIONS_REQUEST_ACCESS_COARSE_LOCATION = 1;
 
     private View mView;
     private Button mBtnStart;
@@ -80,6 +86,7 @@ public class ActivityFragment extends Fragment implements PedometerView, HeartRa
             mBluetoothService = null;
         }
     };
+
 
     public ActivityFragment() {
         // Required empty public constructor
@@ -152,7 +159,11 @@ public class ActivityFragment extends Fragment implements PedometerView, HeartRa
         mBtnStop.setOnClickListener(this);
 
         // connect to BLE
-        enableBluetoothAndStartScan();
+        if (Build.VERSION.SDK_INT >= 23) {
+            requestPermission();
+        } else {
+            enableBluetoothAndStartScan();
+        }
 
         return mView;
     }
@@ -303,5 +314,44 @@ public class ActivityFragment extends Fragment implements PedometerView, HeartRa
     @Override
     public void currentHeartRate(int heartRate) {
         Toast.makeText(getContext(), "HeartRate: " + heartRate, Toast.LENGTH_SHORT).show();
+    }
+
+    private void requestPermission() {
+        if (ContextCompat.checkSelfPermission(getContext(),
+                Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+
+            requestPermissions(
+                    new String[]{Manifest.permission.ACCESS_COARSE_LOCATION},
+                    PERMISSIONS_REQUEST_ACCESS_COARSE_LOCATION);
+
+        } else {
+            // permission is granted
+            enableBluetoothAndStartScan();
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode,
+                                           String permissions[], int[] grantResults) {
+        switch (requestCode) {
+            case PERMISSIONS_REQUEST_ACCESS_COARSE_LOCATION: {
+                // If request is cancelled, the result arrays are empty.
+                if (grantResults.length > 0
+                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+
+                    // permission was granted
+                    enableBluetoothAndStartScan();
+
+                } else {
+
+                    // permission denied
+                    Toast.makeText(getContext(), "You need this permission to get access to the heart rate sensor", Toast.LENGTH_LONG).show();
+                }
+                return;
+            }
+
+            // other 'case' lines to check for other
+            // permissions this app might request
+        }
     }
 }

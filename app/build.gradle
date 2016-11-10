@@ -38,27 +38,22 @@ dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
     testCompile 'junit:junit:4.12'
 
-    // Google
-    
-
-    // Firebase
-    
     compile 'com.android.support:design:24.2.1'
     compile "com.android.support:preference-v7:24.2.1"
     compile 'com.android.support:appcompat-v7:24.2.1'
+    compile 'com.android.support:support-v4:24.2.1'
+
+    // Google
+    compile 'com.google.android.gms:play-services-appinvite:9.4.0'
+    compile 'com.google.android.gms:play-services-ads:9.4.0'
     compile 'com.google.android.gms:play-services-auth:9.4.0'
+
+    // Firebase
     compile 'com.google.firebase:firebase-database:9.4.0'
     compile 'com.google.firebase:firebase-auth:9.4.0'
-    compile 'com.google.firebase:firebase-config:9.4.0'
-    compile 'com.google.android.gms:play-services-appinvite:9.4.0'
-    compile 'com.google.firebase:firebase-messaging:9.4.0'
-    compile 'com.google.android.gms:play-services-ads:9.4.0'
-    compile 'com.google.firebase:firebase-crash:9.4.0'
-    compile 'com.google.firebase:firebase-analytics:9.4.0'
-    compile 'com.android.support:support-v4:24.2.1'
+
+    // Other
     compile 'com.github.jakob-grabner:Circle-Progress-View:v1.2.9.1'
 }
-
-
 
 apply plugin: 'com.google.gms.google-services'
