@@ -24,6 +24,7 @@ public class HeartRateManager implements HeartRateObserver {
 
     private int mHeartRate;
     private double mCalories;
+    private long mLastHeartBeat;
 
     private int mGender;    // 0 = females, 1 = males
     private int mWeight;    // Weight in kg
@@ -37,6 +38,7 @@ public class HeartRateManager implements HeartRateObserver {
         mHeartRateMonitor = heartRateMonitor;
         mHeartRate = 0;
         mCalories = 0;
+        mLastHeartBeat = 0;
 
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(_context);
         mWeight = Integer.parseInt(sharedPreferences.getString("keyWeight", "80"));
@@ -48,10 +50,10 @@ public class HeartRateManager implements HeartRateObserver {
             mGender = 1;
         }
         int height = Integer.parseInt(sharedPreferences.getString("keyHeight", "180"));
-        int PAR = Integer.parseInt(sharedPreferences.getString("keyPAR", "5"));
+        int PAR = Integer.parseInt(sharedPreferences.getString("keyPar", "5"));
 
         mVO2max = (0.133 * mAge) - (0.005 * mAge * mAge) + (11.403 * mGender) + (1.463 * PAR) +
-                (9.17 * height) - (0.254 * mWeight) + (34.143);
+                (9.17 * height/100) - (0.254 * mWeight) + (34.143);
 
         Log.i(TAG, "Weight: " + mWeight + " Gender: " + mGender + " Age: " + mAge);
 
@@ -62,14 +64,26 @@ public class HeartRateManager implements HeartRateObserver {
         mHeartRate = heartRate;
         mView.currentHeartRate(heartRate);
 
+        if (mLastHeartBeat != 0) {
+            calculateCalories();
+        } else {
+            mLastHeartBeat = System.currentTimeMillis();
+        }
+
+
         mView.currentCalories((int) mCalories);
     }
 
     private void calculateCalories() {
-        mCalories = (-59.3954 + mGender * (-36.3781 + 0.271 * mAge + 0.394 * mWeight + 0.404 *
+        long currentHeartbeat = System.currentTimeMillis();
+        double timeDiffSec = (currentHeartbeat - mLastHeartBeat)/1000.0;
+        mLastHeartBeat = currentHeartbeat;
+
+        double kJoulesPerMin = (-59.3954 + mGender * (-36.3781 + 0.271 * mAge + 0.394 * mWeight + 0.404 *
                 mVO2max + 0.634 * mHeartRate) + (1 - mGender) * (0.274 * mAge + 0.103 * mWeight +
                 0.38 * mVO2max + 0.45 * mHeartRate));
 
+        mCalories = mCalories + (kJoulesPerMin / 4.168 / 60 * timeDiffSec);
     }
 
     public void start() {
@@ -85,5 +99,6 @@ public class HeartRateManager implements HeartRateObserver {
     public void reset() {
         mHeartRate = 0;
         mCalories = 0;
+        mLastHeartBeat = 0;
     }
 }

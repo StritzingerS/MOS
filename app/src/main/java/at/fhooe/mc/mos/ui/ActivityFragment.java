@@ -320,7 +320,7 @@ public class ActivityFragment extends Fragment implements PedometerView, HeartRa
     @Override
     public void currentCalories(int currentCalories) {
 
-
+        Log.i(TAG, "Calories: " + currentCalories);
     }
 
     private void requestPermission() {
