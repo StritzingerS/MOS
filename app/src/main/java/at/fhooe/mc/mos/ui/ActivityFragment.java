@@ -77,7 +77,7 @@ public class ActivityFragment extends Fragment implements PedometerView, HeartRa
 
             // String uid = FirebaseAuth.getInstance().getCurrentUser().getUid();
             // DatabaseReference databaseRef = FirebaseDatabase.getInstance().getReference().child("users").child(uid).child("steps");
-            mHeartRateManager = new HeartRateManager(ActivityFragment.this, mBluetoothService, null);
+            mHeartRateManager = new HeartRateManager(ActivityFragment.this, getContext(), mBluetoothService, null);
             mHeartRateManager.start();
         }
 
@@ -220,6 +220,7 @@ public class ActivityFragment extends Fragment implements PedometerView, HeartRa
         mCircleView.setValueAnimated(currentSteps);
     }
 
+
     @Override
     public void dataSaved(boolean success) {
         if (success) {
@@ -276,7 +277,7 @@ public class ActivityFragment extends Fragment implements PedometerView, HeartRa
         }
 
         if (bluetoothManager == null) {
-            bluetoothManager = (BluetoothManager)getContext().getSystemService(Context.BLUETOOTH_SERVICE);
+            bluetoothManager = (BluetoothManager) getContext().getSystemService(Context.BLUETOOTH_SERVICE);
             if (bluetoothManager == null) {
                 Log.e(TAG, "Unable to initialize BluetoothManager.");
                 return false;
@@ -290,15 +291,15 @@ public class ActivityFragment extends Fragment implements PedometerView, HeartRa
         if (!bluetoothAdapter.isEnabled()) {
             Intent enableBtIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
             startActivityForResult(enableBtIntent, REQUEST_ENABLE_BT);
-        } else{
+        } else {
             startActivityForResult(new Intent(getActivity(), ScanActivity.class), REQUEST_GET_DEVICE);
         }
         return true;
     }
+
     /**
      * This method is used universally to bind or unbind from the BluetoothService.
      * Further workflow is specified trough the {@link #mBluetoothServiceConnection}.
-     *
      */
     private void bindBleService(boolean bind) {
         if (bind) {
@@ -314,6 +315,12 @@ public class ActivityFragment extends Fragment implements PedometerView, HeartRa
     @Override
     public void currentHeartRate(int heartRate) {
         Toast.makeText(getContext(), "HeartRate: " + heartRate, Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void currentCalories(int currentCalories) {
+
+
     }
 
     private void requestPermission() {
