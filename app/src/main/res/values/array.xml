@@ -4,4 +4,28 @@
         <item>Male</item>
         <item>Female</item>
     </string-array>
+    <string-array name="genderValues">
+        <item>1</item>
+        <item>0</item>
+    </string-array>
+    <string-array name="par">
+        <item>0 - Avoid walking and exertion</item>
+        <item>1 - Walk for pleasure</item>
+        <item>2 - 10 to 60 minutes per week of modest physical activity</item>
+        <item>3 - Over 60 minutes per week of modest physical activity</item>
+        <item>4 - Less than 30 minutes of heavy physical activity per week</item>
+        <item>5 - 30 to 60 minutes of heavy physical activity per week</item>
+        <item>6 - 1 to 3 hours of heavy physical activity per week</item>
+        <item>7 - Over 3 hours of heavy physical activity per week</item>
+    </string-array>
+    <string-array name="parValues">
+        <item>0</item>
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+        <item>4</item>
+        <item>5</item>
+        <item>6</item>
+        <item>7</item>
+    </string-array>
 </resources>

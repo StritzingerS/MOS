@@ -6,9 +6,9 @@
     <PreferenceCategory
         android:title="Goals">
         <EditTextPreference
-            android:title="Steps"
-            android:key="keyMaxSteps"
-            android:summary="Set the maximum steps you want to reach per activity"
+            android:title="@string/settings_steps_title"
+            android:key="@string/settings_steps_key"
+            android:summary="@string/settings_steps_summary"
             android:numeric="integer">
         </EditTextPreference>
     </PreferenceCategory>
@@ -16,24 +16,30 @@
     <PreferenceCategory
         android:title="Personal data">
         <EditTextPreference
-            android:title="Age"
-            android:key="keyAge"
-            android:summary="Set age in years"
+            android:title="@string/settings_age_title"
+            android:key="@string/settings_age_key"
+            android:summary="@string/settings_age_summary"
             android:numeric="integer" />
         <ListPreference
-            android:title="Gender"
-            android:key="keyGender"
+            android:title="@string/settings_gender_title"
+            android:key="@string/settings_gender_key"
             android:entries="@array/gender"
-            android:entryValues="@array/gender" />
+            android:entryValues="@array/genderValues" />
         <EditTextPreference
-            android:title="Height"
-            android:key="keyHeight"
-            android:summary="Set height in meters"
+            android:title="@string/settings_height_title"
+            android:key="@string/settings_height_key"
+            android:summary="@string/settings_height_summary"
             android:numeric="integer" />
         <EditTextPreference
-            android:title="Weight"
-            android:key="keyWeight"
-            android:summary="Set weight in kilograms"
+            android:title="@string/settings_weight_title"
+            android:key="@string/settings_weight_key"
+            android:summary="@string/settings_weight_summary"
             android:numeric="integer" />
+        <ListPreference
+            android:title="@string/settings_par_title"
+            android:key="@string/settings_par_key"
+            android:summary="@string/settings_par_summary"
+            android:entries="@array/par"
+            android:entryValues="@array/parValues" />
     </PreferenceCategory>
 </PreferenceScreen>
