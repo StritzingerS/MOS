@@ -12,13 +12,16 @@ import android.bluetooth.BluetoothManager;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Binder;
+import android.os.Handler;
 import android.os.IBinder;
+import android.os.Looper;
 import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.UUID;
+import java.util.concurrent.RunnableFuture;
 
 import at.fhooe.mc.mos.logic.HeartRateObserver;
 
@@ -29,6 +32,7 @@ import at.fhooe.mc.mos.logic.HeartRateObserver;
 public class BluetoothService extends Service implements HeartRateMonitor {
 
     private List<HeartRateObserver> mObservers = new ArrayList<>();
+    private Handler mUiHandler;
 
     //constants
     private static final String TAG = "BluetoothService";
@@ -91,7 +95,7 @@ public class BluetoothService extends Service implements HeartRateMonitor {
             } else {
                 format = BluetoothGattCharacteristic.FORMAT_UINT8;
             }
-            int heartRate = characteristic.getIntValue(format, 1);
+            final int heartRate = characteristic.getIntValue(format, 1);
 
             Log.i(TAG,"Heartrate: " + heartRate);
 
@@ -99,8 +103,14 @@ public class BluetoothService extends Service implements HeartRateMonitor {
                 // Valid heart rate found
 
                 // notify
-                notifyObservers(heartRate);
+                mUiHandler.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        notifyObservers(heartRate);
+                    }
+                });
             }
+
         }
     };
 
@@ -124,6 +134,10 @@ public class BluetoothService extends Service implements HeartRateMonitor {
             Log.e(TAG, "Unable to obtain a BluetoothAdapter.");
             return false;
         }
+
+
+        mUiHandler = new Handler(Looper.getMainLooper());
+
         Log.i(TAG, "BluetoothService initialized");
         return true;
     }
