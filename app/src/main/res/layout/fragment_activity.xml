@@ -11,6 +11,7 @@
         android:orientation="vertical"
         android:padding="@dimen/activity_horizontal_margin">
 
+        <!-- Step chart -->
         <at.grabner.circleprogress.CircleProgressView
             android:padding="20dp"
             android:layout_gravity="center"
@@ -31,28 +32,82 @@
             CircleProgressView:cpv_unitPosition="right_top"
             CircleProgressView:cpv_unitScale="1" />
 
-            <LinearLayout
+        <!-- Buttons -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/btn_activity_start"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal">
+                android:text="Start"
+                android:layout_weight="1" />
 
-                <Button
-                    android:id="@+id/btn_activity_start"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="Start"
-                    android:layout_weight="1" />
+            <Button
+                android:id="@+id/btn_activity_stop"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Stop"
+                android:layout_weight="1"
+                android:enabled="false"/>
 
-                <Button
-                    android:id="@+id/btn_activity_stop"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="Stop"
-                    android:layout_weight="1"
-                    android:enabled="false"/>
+        </LinearLayout>
 
-            </LinearLayout>
+        <!-- Heart rate Textview -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
 
+            <TextView
+                android:text="Heart Rate: "
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/tv_activity_heartrate_text"
+                android:layout_weight="1"
+                android:textAppearance="@android:style/TextAppearance.Large"
+                android:textColor="?attr/colorControlActivated" />
+
+            <TextView
+                android:text="-"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/tv_activity_heartrate"
+                android:layout_weight="1"
+                android:textAppearance="@android:style/TextAppearance.Large"
+                android:textAlignment="textEnd"
+                android:fontFamily="sans-serif"/>
+
+        </LinearLayout>
+
+        <!-- Calories Textview -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:text="Calories: "
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/tv_activity_calories_text"
+                android:layout_weight="1"
+                android:textAppearance="@android:style/TextAppearance.Large"
+                android:textColor="?attr/colorControlActivated" />
+
+            <TextView
+                android:text="-"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/tv_activity_calories"
+                android:layout_weight="1"
+                android:textAppearance="@android:style/TextAppearance.Large"
+                android:textAlignment="textEnd"
+                android:fontFamily="sans-serif"/>
+                <!--android:textAppearance="@android:style/TextAppearance.Material.Headline" -->
+        </LinearLayout>
 
     </LinearLayout>
 

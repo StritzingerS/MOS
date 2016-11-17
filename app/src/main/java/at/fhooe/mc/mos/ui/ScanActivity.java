@@ -100,6 +100,7 @@ public class ScanActivity extends ListActivity implements View.OnClickListener {
     @Override
     public void onClick(View v) {
         if (!mScanning && v.getId() == R.id.scanActivity_button_refresh) {
+            mDeviceListAdapter.clear();
             scanForDevices(true);
         }
     }

@@ -13,7 +13,6 @@ import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.IBinder;
-import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.preference.PreferenceManager;
@@ -22,13 +21,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
-import at.fhooe.mc.mos.BuildConfig;
 import at.fhooe.mc.mos.R;
 import at.fhooe.mc.mos.hardware.AndroidPedometer;
 import at.fhooe.mc.mos.hardware.BluetoothService;
@@ -53,7 +52,8 @@ public class ActivityFragment extends Fragment implements PedometerView, HeartRa
     private CircleProgressView mCircleView;
     private StepManager mStepManager;
     private HeartRateManager mHeartRateManager;
-
+    private TextView mTVCalories;
+    private TextView mTVHeartRate;
 
     private static final int REQUEST_ENABLE_BT = 1;
     private static final int REQUEST_GET_DEVICE = 2;
@@ -150,6 +150,11 @@ public class ActivityFragment extends Fragment implements PedometerView, HeartRa
             }
         });
         */
+
+        //TextViews
+        mTVCalories = (TextView) mView.findViewById(R.id.tv_activity_calories);
+        mTVHeartRate = (TextView) mView.findViewById(R.id.tv_activity_heartrate);
+
 
         // Buttons
         mBtnStart = (Button) mView.findViewById(R.id.btn_activity_start);
@@ -314,13 +319,19 @@ public class ActivityFragment extends Fragment implements PedometerView, HeartRa
 
     @Override
     public void currentHeartRate(int heartRate) {
-        Toast.makeText(getContext(), "HeartRate: " + heartRate, Toast.LENGTH_SHORT).show();
+        //Toast.makeText(getContext(), "HeartRate: " + heartRate, Toast.LENGTH_SHORT).show();
+        if(heartRate==0){
+            mTVHeartRate.setText("-");
+        }else {
+            mTVHeartRate.setText(String.valueOf(heartRate));
+        }
     }
 
     @Override
     public void currentCalories(int currentCalories) {
 
         Log.i(TAG, "Calories: " + currentCalories);
+        mTVCalories.setText(String.valueOf(currentCalories));
     }
 
     private void requestPermission() {
