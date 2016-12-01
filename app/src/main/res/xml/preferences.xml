@@ -19,6 +19,7 @@
             android:title="@string/settings_age_title"
             android:key="@string/settings_age_key"
             android:summary="@string/settings_age_summary"
+            android:inputType="number"
             android:numeric="integer" />
         <ListPreference
             android:title="@string/settings_gender_title"
@@ -29,17 +30,33 @@
             android:title="@string/settings_height_title"
             android:key="@string/settings_height_key"
             android:summary="@string/settings_height_summary"
+            android:inputType="number"
             android:numeric="integer" />
         <EditTextPreference
             android:title="@string/settings_weight_title"
             android:key="@string/settings_weight_key"
             android:summary="@string/settings_weight_summary"
+            android:inputType="number"
             android:numeric="integer" />
+    </PreferenceCategory>
+
+    <PreferenceCategory
+        android:title="Health Data">
         <ListPreference
             android:title="@string/settings_par_title"
             android:key="@string/settings_par_key"
             android:summary="@string/settings_par_summary"
             android:entries="@array/par"
             android:entryValues="@array/parValues" />
+        <EditTextPreference
+            android:title="@string/settings_hrmax_title"
+            android:key="@string/settings_hrmax_key"
+            android:summary="@string/settings_hrmax_summary"
+            android:inputType="number"/>
+        <EditTextPreference
+            android:title="@string/settings_hrrest_title"
+            android:key="@string/settings_hrrest_key"
+            android:summary="@string/settings_hrrest_summary"
+            android:inputType="number"/>
     </PreferenceCategory>
 </PreferenceScreen>

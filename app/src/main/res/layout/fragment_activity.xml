@@ -11,7 +11,7 @@
         android:orientation="vertical"
         android:padding="@dimen/activity_horizontal_margin">
 
-        <!-- Step chart -->
+        <!-- Exercise chart -->
         <at.grabner.circleprogress.CircleProgressView
             android:padding="20dp"
             android:layout_gravity="center"
@@ -62,24 +62,84 @@
             android:orientation="horizontal">
 
             <TextView
-                android:text="Heart Rate: "
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
                 android:id="@+id/tv_activity_heartrate_text"
+                android:text="Heart Rate: "
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:textAppearance="@android:style/TextAppearance.Large"
-                android:textColor="?attr/colorControlActivated" />
+                android:textColor="?attr/colorControlActivated"
+                android:textSize="18sp" />
+
+
+            <TextView
+                android:id="@+id/tv_activity_heartrate"
+                android:text="-"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:textAppearance="@android:style/TextAppearance.Large"
+                android:textAlignment="textEnd"
+                android:fontFamily="sans-serif"
+                android:textSize="18sp" />
+        </LinearLayout>
+
+        <!-- Maximum Heart rate Textview -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/tv_activity_max_heartrate_text"
+                android:text="Maximum Heart Rate: "
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.55"
+                android:textAppearance="@android:style/TextAppearance.Large"
+                android:textColor="?attr/colorControlActivated"
+                android:textSize="18sp" />
+
+
+            <TextView
+                android:id="@+id/tv_activity_max_heartrate"
+                android:text="-"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.45"
+                android:textAppearance="@android:style/TextAppearance.Large"
+                android:textAlignment="textEnd"
+                android:fontFamily="sans-serif"
+                android:textSize="18sp" />
+        </LinearLayout>
+
+        <!-- average HeartRate Textview -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:text="Average Heart Rate: "
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/tv_activity_average_heartrate_text"
+                android:layout_weight="1"
+                android:textAppearance="@android:style/TextAppearance.Large"
+                android:textColor="?attr/colorControlActivated"
+                android:textSize="18sp" />
 
             <TextView
                 android:text="-"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:id="@+id/tv_activity_heartrate"
+                android:id="@+id/tv_activity_average_heartrate"
                 android:layout_weight="1"
                 android:textAppearance="@android:style/TextAppearance.Large"
                 android:textAlignment="textEnd"
-                android:fontFamily="sans-serif"/>
-
+                android:fontFamily="sans-serif"
+                android:textSize="18sp" />
+            <!--android:textAppearance="@android:style/TextAppearance.Material.Headline" -->
         </LinearLayout>
 
         <!-- Calories Textview -->
@@ -95,7 +155,8 @@
                 android:id="@+id/tv_activity_calories_text"
                 android:layout_weight="1"
                 android:textAppearance="@android:style/TextAppearance.Large"
-                android:textColor="?attr/colorControlActivated" />
+                android:textColor="?attr/colorControlActivated"
+                android:textSize="18sp" />
 
             <TextView
                 android:text="-"
@@ -105,8 +166,38 @@
                 android:layout_weight="1"
                 android:textAppearance="@android:style/TextAppearance.Large"
                 android:textAlignment="textEnd"
-                android:fontFamily="sans-serif"/>
+                android:fontFamily="sans-serif"
+                android:textSize="18sp" />
                 <!--android:textAppearance="@android:style/TextAppearance.Material.Headline" -->
+        </LinearLayout>
+
+        <!-- Distance Textview -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:text="Distance: "
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/tv_activity_distance_text"
+                android:layout_weight="1"
+                android:textAppearance="@android:style/TextAppearance.Large"
+                android:textColor="?attr/colorControlActivated"
+                android:textSize="18sp" />
+
+            <TextView
+                android:text="-"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/tv_activity_distance"
+                android:layout_weight="1"
+                android:textAppearance="@android:style/TextAppearance.Large"
+                android:textAlignment="textEnd"
+                android:fontFamily="sans-serif"
+                android:textSize="18sp" />
+            <!--android:textAppearance="@android:style/TextAppearance.Material.Headline" -->
         </LinearLayout>
 
     </LinearLayout>

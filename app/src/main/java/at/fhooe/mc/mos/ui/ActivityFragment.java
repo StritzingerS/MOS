@@ -32,7 +32,7 @@ import at.fhooe.mc.mos.R;
 import at.fhooe.mc.mos.hardware.AndroidPedometer;
 import at.fhooe.mc.mos.hardware.BluetoothService;
 import at.fhooe.mc.mos.logic.HeartRateManager;
-import at.fhooe.mc.mos.logic.StepManager;
+import at.fhooe.mc.mos.logic.ExerciseManager;
 import at.grabner.circleprogress.CircleProgressView;
 import at.grabner.circleprogress.TextMode;
 
@@ -50,10 +50,14 @@ public class ActivityFragment extends Fragment implements PedometerView, HeartRa
 
 
     private CircleProgressView mCircleView;
-    private StepManager mStepManager;
+    private ExerciseManager mExerciseManager;
     private HeartRateManager mHeartRateManager;
     private TextView mTVCalories;
+    private TextView mTVDistance;
     private TextView mTVHeartRate;
+    private TextView mTVAvgHeartRate;
+    private TextView mTVHrMaxPercentage;
+
 
     private static final int REQUEST_ENABLE_BT = 1;
     private static final int REQUEST_GET_DEVICE = 2;
@@ -79,6 +83,8 @@ public class ActivityFragment extends Fragment implements PedometerView, HeartRa
             // DatabaseReference databaseRef = FirebaseDatabase.getInstance().getReference().child("users").child(uid).child("steps");
             mHeartRateManager = new HeartRateManager(ActivityFragment.this, getContext(), mBluetoothService, null);
             mHeartRateManager.start();
+
+            mExerciseManager.setHeartRateManager(mHeartRateManager);
         }
 
         @Override
@@ -114,9 +120,10 @@ public class ActivityFragment extends Fragment implements PedometerView, HeartRa
 
         // Connection to Firebase
         String uid = FirebaseAuth.getInstance().getCurrentUser().getUid();
-        DatabaseReference databaseRef = FirebaseDatabase.getInstance().getReference().child("users").child(uid).child("steps");
+        DatabaseReference databaseRef = FirebaseDatabase.getInstance().getReference().child("users").child(uid).child("exercise");
         // needs application context to prevent memory leaks
-        mStepManager = new StepManager(this, AndroidPedometer.getInstance(getActivity().getApplicationContext()), databaseRef);
+
+        mExerciseManager = new ExerciseManager(this, getContext(), AndroidPedometer.getInstance(getActivity().getApplicationContext()), databaseRef);
     }
 
     @Override
@@ -153,8 +160,10 @@ public class ActivityFragment extends Fragment implements PedometerView, HeartRa
 
         //TextViews
         mTVCalories = (TextView) mView.findViewById(R.id.tv_activity_calories);
+        mTVDistance = (TextView) mView.findViewById(R.id.tv_activity_distance);
         mTVHeartRate = (TextView) mView.findViewById(R.id.tv_activity_heartrate);
-
+        mTVAvgHeartRate = (TextView) mView.findViewById(R.id.tv_activity_average_heartrate);
+        mTVHrMaxPercentage = (TextView) mView.findViewById(R.id.tv_activity_max_heartrate);
 
         // Buttons
         mBtnStart = (Button) mView.findViewById(R.id.btn_activity_start);
@@ -191,7 +200,7 @@ public class ActivityFragment extends Fragment implements PedometerView, HeartRa
         switch (v.getId()) {
 
             case R.id.btn_activity_start:
-                mStepManager.startCounting();
+                mExerciseManager.startCounting();
                 mBtnStart.setEnabled(false);
                 mBtnStop.setEnabled(true);
 
@@ -208,10 +217,10 @@ public class ActivityFragment extends Fragment implements PedometerView, HeartRa
                     mHeartRateManager.stop();
                 }
 
-                mStepManager.stopCounter();
+                mExerciseManager.stopCounter();
 
                 // saving online
-                mStepManager.saveData();
+                mExerciseManager.saveData();
 
                 break;
             default:
@@ -229,14 +238,17 @@ public class ActivityFragment extends Fragment implements PedometerView, HeartRa
     @Override
     public void dataSaved(boolean success) {
         if (success) {
-            Toast.makeText(getContext(), "Step data saved online", Toast.LENGTH_LONG).show();
+            Toast.makeText(getContext(), "Exercise data saved online", Toast.LENGTH_LONG).show();
         } else {
             Toast.makeText(getContext(), "Error saving data", Toast.LENGTH_LONG).show();
         }
 
         // TODO: handle errors
         // treat as success for now...
-        mStepManager.resetCounter();
+        mExerciseManager.reset();
+        if(mHeartRateManager != null) {
+            mHeartRateManager.reset();
+        }
 
         // enable button
         mBtnStart.setEnabled(true);
@@ -244,6 +256,11 @@ public class ActivityFragment extends Fragment implements PedometerView, HeartRa
 
         // reset view
         mCircleView.setValueAnimated(0);
+        mTVCalories.setText(String.valueOf(0));
+        mTVDistance.setText(String.valueOf(0)+"km");
+        mTVAvgHeartRate.setText("-");
+        mTVHrMaxPercentage.setText("-");
+        mTVHeartRate.setText("-");
     }
 
     // Callback for Activities started with a specific request Code.
@@ -329,9 +346,24 @@ public class ActivityFragment extends Fragment implements PedometerView, HeartRa
 
     @Override
     public void currentCalories(int currentCalories) {
-
         Log.i(TAG, "Calories: " + currentCalories);
         mTVCalories.setText(String.valueOf(currentCalories));
+    }
+
+    @Override
+    public void currentDistance(double currentDistance) {
+        Log.i(TAG, "Distance: " + currentDistance);
+        mTVDistance.setText(String.valueOf(currentDistance)+"km");
+    }
+
+    @Override
+    public void currentAvgHeartRate(int avgHeartRate){
+        mTVAvgHeartRate.setText(String.valueOf(avgHeartRate));
+    }
+
+    @Override
+    public void currentHrMaxPercentage(int hrMaxPercentage){
+        mTVHrMaxPercentage.setText(String.valueOf(hrMaxPercentage)+"%");
     }
 
     private void requestPermission() {

@@ -6,5 +6,6 @@ package at.fhooe.mc.mos.ui;
 public interface HeartRateView {
     void currentHeartRate(int heartRate);
     void currentCalories(int currentCalories);
-
+    void currentAvgHeartRate(int avgHeartRate);
+    void currentHrMaxPercentage(int hrMaxPercentage);
 }

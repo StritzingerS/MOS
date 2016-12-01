@@ -14,21 +14,33 @@
     <string name="settings_steps_title">Steps</string>
     <string name="settings_steps_key">keySteps</string>
     <string name="settings_steps_summary">Set the maximum steps you want to reach per activity</string>
+
     <string name="settings_age_title">Age</string>
     <string name="settings_age_key">keyAge</string>
     <string name="settings_age_summary">Set age in years</string>
+
     <string name="settings_gender_title">Gender</string>
     <string name="settings_gender_key">keyGender</string>
+
     <string name="settings_height_title">Height</string>
     <string name="settings_height_key">keyHeight</string>
     <string name="settings_height_summary">Set height in centimeters</string>
+
     <string name="settings_weight_title">Weight</string>
     <string name="settings_weight_key">keyWeight</string>
     <string name="settings_weight_summary">Set weight in kilograms</string>
+
     <string name="settings_par_title">Physical Activity Rating (PA-R)</string>
     <string name="settings_par_key">keyPar</string>
     <string name="settings_par_summary">Choose your fitness level</string>
 
+    <string name="settings_hrmax_title">Maximum Heart Rate</string>
+    <string name="settings_hrmax_key">keyHrMax</string>
+    <string name="settings_hrmax_summary">Set your maximum heart rate</string>
+
+    <string name="settings_hrrest_title">Resting Heart Rate</string>
+    <string name="settings_hrrest_key">keyHrRest</string>
+    <string name="settings_hrrest_summary">Set your resting heart rate</string>
 
 
 </resources>
