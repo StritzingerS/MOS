@@ -200,6 +200,35 @@
             <!--android:textAppearance="@android:style/TextAppearance.Material.Headline" -->
         </LinearLayout>
 
+        <!-- Altitude Textview -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:text="Altitude: "
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/tv_activity_altitude_text"
+                android:layout_weight="1"
+                android:textAppearance="@android:style/TextAppearance.Large"
+                android:textColor="?attr/colorControlActivated"
+                android:textSize="18sp" />
+
+            <TextView
+                android:text="-"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/tv_activity_altitude"
+                android:layout_weight="1"
+                android:textAppearance="@android:style/TextAppearance.Large"
+                android:textAlignment="textEnd"
+                android:fontFamily="sans-serif"
+                android:textSize="18sp" />
+            <!--android:textAppearance="@android:style/TextAppearance.Material.Headline" -->
+        </LinearLayout>
+
     </LinearLayout>
 
 </LinearLayout>

@@ -25,12 +25,15 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.api.model.StringList;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
 import at.fhooe.mc.mos.R;
+import at.fhooe.mc.mos.hardware.AndroidBarometer;
 import at.fhooe.mc.mos.hardware.AndroidPedometer;
 import at.fhooe.mc.mos.hardware.BluetoothService;
+import at.fhooe.mc.mos.logic.AltitudeManager;
 import at.fhooe.mc.mos.logic.HeartRateManager;
 import at.fhooe.mc.mos.logic.ExerciseManager;
 import at.grabner.circleprogress.CircleProgressView;
@@ -39,7 +42,7 @@ import at.grabner.circleprogress.TextMode;
 /**
  * Fragment for starting and stopping a activity session.
  */
-public class ActivityFragment extends Fragment implements PedometerView, HeartRateView, View.OnClickListener {
+public class ActivityFragment extends Fragment implements PedometerView, HeartRateView, AltitudeView, View.OnClickListener {
 
     private static final String TAG = ActivityFragment.class.getSimpleName();
     private static final int PERMISSIONS_REQUEST_ACCESS_COARSE_LOCATION = 1;
@@ -52,11 +55,13 @@ public class ActivityFragment extends Fragment implements PedometerView, HeartRa
     private CircleProgressView mCircleView;
     private ExerciseManager mExerciseManager;
     private HeartRateManager mHeartRateManager;
+    private AltitudeManager mAltitudeManager;
     private TextView mTVCalories;
     private TextView mTVDistance;
     private TextView mTVHeartRate;
     private TextView mTVAvgHeartRate;
     private TextView mTVHrMaxPercentage;
+    private TextView mTVAltitude;
 
 
     private static final int REQUEST_ENABLE_BT = 1;
@@ -124,6 +129,7 @@ public class ActivityFragment extends Fragment implements PedometerView, HeartRa
         // needs application context to prevent memory leaks
 
         mExerciseManager = new ExerciseManager(this, getContext(), AndroidPedometer.getInstance(getActivity().getApplicationContext()), databaseRef);
+        mAltitudeManager = new AltitudeManager(this, getContext(), AndroidBarometer.getInstance(getActivity().getApplicationContext()));
     }
 
     @Override
@@ -164,6 +170,7 @@ public class ActivityFragment extends Fragment implements PedometerView, HeartRa
         mTVHeartRate = (TextView) mView.findViewById(R.id.tv_activity_heartrate);
         mTVAvgHeartRate = (TextView) mView.findViewById(R.id.tv_activity_average_heartrate);
         mTVHrMaxPercentage = (TextView) mView.findViewById(R.id.tv_activity_max_heartrate);
+        mTVAltitude = (TextView) mView.findViewById(R.id.tv_activity_altitude);
 
         // Buttons
         mBtnStart = (Button) mView.findViewById(R.id.btn_activity_start);
@@ -201,6 +208,8 @@ public class ActivityFragment extends Fragment implements PedometerView, HeartRa
 
             case R.id.btn_activity_start:
                 mExerciseManager.startCounting();
+                mAltitudeManager.start();
+
                 mBtnStart.setEnabled(false);
                 mBtnStop.setEnabled(true);
 
@@ -218,6 +227,7 @@ public class ActivityFragment extends Fragment implements PedometerView, HeartRa
                 }
 
                 mExerciseManager.stopCounter();
+                mAltitudeManager.stop();
 
                 // saving online
                 mExerciseManager.saveData();
@@ -261,6 +271,7 @@ public class ActivityFragment extends Fragment implements PedometerView, HeartRa
         mTVAvgHeartRate.setText("-");
         mTVHrMaxPercentage.setText("-");
         mTVHeartRate.setText("-");
+        mTVAltitude.setText("-");
     }
 
     // Callback for Activities started with a specific request Code.
@@ -403,5 +414,11 @@ public class ActivityFragment extends Fragment implements PedometerView, HeartRa
             // other 'case' lines to check for other
             // permissions this app might request
         }
+    }
+
+    @Override
+    public void currentAltitude(float altitude) {
+        // no commas
+        mTVAltitude.setText(String.valueOf((int) altitude));
     }
 }

@@ -26,7 +26,6 @@
             </intent-filter>
         </activity>
         <activity android:name=".ui.SignInActivity" />
-
         <activity
             android:name=".ui.ScanActivity"
             android:parentActivityName=".ui.MainActivity">
@@ -34,6 +33,7 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="at.fhooe.mc.mos.ui.MainActivity" />
         </activity>
+
         <service
             android:name=".hardware.BluetoothService"
             android:exported="false" />
