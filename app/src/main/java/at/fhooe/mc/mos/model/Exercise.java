@@ -9,17 +9,23 @@ import java.util.Map;
  * Simple model of a step for testing purposes.
  */
 public class Exercise {
+
+    private int mStepGoal;
     private int mStepCount;
     private int mCalorieCount;
     private int mAvgHeartRate;
     private int mMaxHeartRate;
     private int mMinHeartRate;
-    private long mTimeInMilli;
+    private long mDuration;
+    private long mStartTime;
     private double mTrimp;
 
     public Exercise() {
         // Default constructor required for calls to DataSnapshot.getValue(ListItem.class)
     }
+
+    public int getmStepGoal() { return mStepGoal; }
+    public void setmStepGoal(int mStepGoal) { this.mStepGoal = mStepGoal; }
 
     public int getmStepCount() {
         return mStepCount;
@@ -40,8 +46,11 @@ public class Exercise {
     public int getmMinHeartRate() {        return mMinHeartRate;    }
     public void setmMinHeartRate(int mMinHeartRate) {        this.mMinHeartRate = mMinHeartRate;    }
 
-    public long getmTimeInMilli() {        return mTimeInMilli;    }
-    public void setmTimeInMilli(long mTimeInMilli) { this.mTimeInMilli = mTimeInMilli; }
+    public long getmDuration() {        return mDuration;    }
+    public void setmDuration(long mTimeInMilli) { this.mDuration = mTimeInMilli; }
+
+    public long getmStartTime() { return mStartTime; }
+    public void setmStartTime(long mStartTime) { this.mStartTime = mStartTime; }
 
     public double getmTrimp() {        return mTrimp;    }
     public void setmTrimp(double mTrimp) {        this.mTrimp = mTrimp;    }

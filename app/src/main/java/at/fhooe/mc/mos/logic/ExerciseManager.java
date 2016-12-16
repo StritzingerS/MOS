@@ -27,6 +27,7 @@ public class ExerciseManager implements PedometerObserver {
     private HeartRateManager mHeartRateManager;
     private int mWeight;
 
+    private int mStepGoal;
     private int mStepCount;
     private long mStartTime;
     private long mStopTime;
@@ -46,8 +47,10 @@ public class ExerciseManager implements PedometerObserver {
         mLastStepTime=0;
         mCalories =0.0;
 
-        //load settings for VO2max calculation
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(_context);
+        mStepGoal = Integer.parseInt(sharedPreferences.getString("keyMaxSteps", "100"));
+
+        //load settings for VO2max calculation
         int weight = Integer.parseInt(sharedPreferences.getString("keyWeight", "80"));
         int age = Integer.parseInt(sharedPreferences.getString("keyAge", "20"));
         int mWeight = Integer.parseInt(sharedPreferences.getString("keyHeight", "180"));
@@ -99,8 +102,10 @@ public class ExerciseManager implements PedometerObserver {
 
     public void saveData() {
         Exercise exercise = new Exercise();
+        exercise.setmStepGoal(mStepGoal);
         exercise.setmStepCount(mStepCount);
-        exercise.setmTimeInMilli(mStopTime-mStartTime);
+        exercise.setmDuration(mStopTime-mStartTime);
+        exercise.setmStartTime(mStartTime);
 
         if(mHeartRateManager != null){
             exercise.setmCalorieCount((int)mHeartRateManager.getCalories());
@@ -108,6 +113,8 @@ public class ExerciseManager implements PedometerObserver {
             exercise.setmMaxHeartRate(mHeartRateManager.getmHRMax());
             exercise.setmMinHeartRate(mHeartRateManager.getmHRMin());
             exercise.setmTrimp(mHeartRateManager.getTrimp()*(mStopTime-mStartTime)/1000.0/60.0);
+        }else{
+            exercise.setmCalorieCount((int)mCalories);
         }
 
         // push new value

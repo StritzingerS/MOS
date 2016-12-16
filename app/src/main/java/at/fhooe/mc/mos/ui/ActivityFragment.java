@@ -138,7 +138,6 @@ public class ActivityFragment extends Fragment implements PedometerView, HeartRa
         // Inflate the layout for this fragment
         mView = inflater.inflate(R.layout.fragment_activity, container, false);
 
-
         // Circular View
         int maxSteps = getMaxSteps();
 
