@@ -116,6 +116,7 @@ public class BluetoothService extends Service implements HeartRateMonitor {
 
     @Override
     public IBinder onBind(Intent intent) {
+        Log.i(TAG, "onBind Bluetooth Service");
         return mBinder;
     }
 
@@ -180,7 +181,7 @@ public class BluetoothService extends Service implements HeartRateMonitor {
     //performs cleanup.
     @Override
     public boolean onUnbind(Intent intent) {
-
+        Log.i(TAG, "Unbind Bluetooth Service");
         if (mBluetoothGatt != null) {
             mBluetoothGatt.disconnect();
             mBluetoothGatt.close();

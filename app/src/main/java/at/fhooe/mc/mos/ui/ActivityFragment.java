@@ -50,7 +50,7 @@ public class ActivityFragment extends Fragment implements PedometerView, HeartRa
     private View mView;
     private Button mBtnStart;
     private Button mBtnStop;
-
+    private Button mBtnBluetooth;
 
     private CircleProgressView mCircleView;
     private ExerciseManager mExerciseManager;
@@ -63,14 +63,12 @@ public class ActivityFragment extends Fragment implements PedometerView, HeartRa
     private TextView mTVHrMaxPercentage;
     private TextView mTVAltitude;
 
-
     private static final int REQUEST_ENABLE_BT = 1;
     private static final int REQUEST_GET_DEVICE = 2;
     public static final String EXTRAS_DEVICE_NAME = "bluetoothleheartrate.ble.device.name";
     public static final String EXTRAS_DEVICE_ADDRESS = "bluetoothleheartrate.ble.device.address";
 
     private boolean mBleServiceIsBound = false;
-    // Button mBtnScan;
 
     //service connections
     private String mDeviceAddress = null;
@@ -90,14 +88,37 @@ public class ActivityFragment extends Fragment implements PedometerView, HeartRa
             mHeartRateManager.start();
 
             mExerciseManager.setHeartRateManager(mHeartRateManager);
+            setHeartRateButtonVisibility(false);
+            setHeartRateTextViewsVisibility(true);
         }
-
         @Override
         public void onServiceDisconnected(ComponentName name) {
             mBluetoothService = null;
         }
     };
 
+    public void setHeartRateButtonVisibility(boolean enable){
+        if(enable) {
+            mBtnBluetooth.setVisibility(View.VISIBLE);
+        }else{
+            mBtnBluetooth.setVisibility(View.GONE);
+        }
+    }
+
+    public void setHeartRateTextViewsVisibility(boolean enable){
+        int visibility;
+        if(enable) {
+            visibility=View.VISIBLE;
+        }else{
+            visibility=View.GONE;
+        }
+        mView.findViewById(R.id.tv_activity_heartrate).setVisibility(visibility);
+        mView.findViewById(R.id.tv_activity_heartrate_text).setVisibility(visibility);
+        mView.findViewById(R.id.tv_activity_average_heartrate).setVisibility(visibility);
+        mView.findViewById(R.id.tv_activity_average_heartrate_text).setVisibility(visibility);
+        mView.findViewById(R.id.tv_activity_max_heartrate).setVisibility(visibility);
+        mView.findViewById(R.id.tv_activity_max_heartrate_text).setVisibility(visibility);
+    }
 
     public ActivityFragment() {
         // Required empty public constructor
@@ -106,6 +127,7 @@ public class ActivityFragment extends Fragment implements PedometerView, HeartRa
     @Override
     public void onDestroy() {
         super.onDestroy();
+        Log.i(TAG, "On Destroy");
         bindBleService(false);
     }
 
@@ -145,23 +167,11 @@ public class ActivityFragment extends Fragment implements PedometerView, HeartRa
 
         // gradient
         mCircleView.setBarColor(getResources().getColor(R.color.red), getResources().getColor(R.color.green));
-
         mCircleView.setMaxValue(maxSteps);
-
         mCircleView.setUnit("/ " + maxSteps);
         mCircleView.setUnitVisible(true);
-
         mCircleView.setTextMode(TextMode.VALUE); // Set text mode to text to show text
         mCircleView.setValueAnimated(0);
-
-        /*
-        mCircleView.setOnProgressChangedListener(new CircleProgressView.OnProgressChangedListener() {
-            @Override
-            public void onProgressChanged(float value) {
-                Log.d(TAG, "Progress Changed: " + value);
-            }
-        });
-        */
 
         //TextViews
         mTVCalories = (TextView) mView.findViewById(R.id.tv_activity_calories);
@@ -178,13 +188,11 @@ public class ActivityFragment extends Fragment implements PedometerView, HeartRa
         mBtnStop = (Button) mView.findViewById(R.id.btn_activity_stop);
         mBtnStop.setOnClickListener(this);
 
-        // connect to BLE
-        if (Build.VERSION.SDK_INT >= 23) {
-            requestPermission();
-        } else {
-            enableBluetoothAndStartScan();
-        }
+        mBtnBluetooth = (Button) mView.findViewById(R.id.btn_activity_enable_bluetooth);
+        mBtnBluetooth.setOnClickListener(this);
 
+        setHeartRateTextViewsVisibility(false);
+        setHeartRateButtonVisibility(true);
         return mView;
     }
 
@@ -212,6 +220,8 @@ public class ActivityFragment extends Fragment implements PedometerView, HeartRa
                 mBtnStart.setEnabled(false);
                 mBtnStop.setEnabled(true);
 
+                setHeartRateButtonVisibility(false);
+
                 if (mHeartRateManager != null) {
                     mHeartRateManager.start();
                 }
@@ -231,6 +241,18 @@ public class ActivityFragment extends Fragment implements PedometerView, HeartRa
                 // saving online
                 mExerciseManager.saveData();
 
+                setHeartRateButtonVisibility(true);
+
+                break;
+            case R.id.btn_activity_enable_bluetooth:
+                // connect to BLE
+                if(mHeartRateManager == null) {
+                    if (Build.VERSION.SDK_INT >= 23) {
+                        requestPermission();
+                    } else {
+                        enableBluetoothAndStartScan();
+                    }
+                }
                 break;
             default:
                 Log.d(TAG, "unknown onclick id encountered...");

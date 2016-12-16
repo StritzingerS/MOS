@@ -55,6 +55,21 @@
 
         </LinearLayout>
 
+        <!-- Bleutooth Button -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/btn_activity_enable_bluetooth"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Add heartrate monitor"
+                android:layout_weight="1" />
+
+        </LinearLayout>
+
         <!-- Heart rate Textview -->
         <LinearLayout
             android:layout_width="match_parent"

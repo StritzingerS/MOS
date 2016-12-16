@@ -29,6 +29,9 @@ public class HeartRateManager implements HeartRateObserver {
     private int mAvgHRCounter;
     private int mHRMax;
     private int mHRMin;
+    private boolean mCountCalories;
+
+
 
     private int mGender;    // 0 = females, 1 = males
     private int mWeight;    // Weight in kg
@@ -90,12 +93,11 @@ public class HeartRateManager implements HeartRateObserver {
             mHRMin = heartRate;
         }
 
-        if (mLastHeartBeat != 0) {
+        if (mLastHeartBeat != 0 && mCountCalories) {
             calculateCalories();
         } else {
             mLastHeartBeat = System.currentTimeMillis();
         }
-
 
         mView.currentHeartRate(heartRate);
         mView.currentCalories((int) mCalories);
@@ -103,7 +105,12 @@ public class HeartRateManager implements HeartRateObserver {
         mView.currentHrMaxPercentage((heartRate*100/mMaximumHR));
     }
 
+    public void setCountCalories(boolean mCountCalories) {
+        this.mCountCalories = mCountCalories;
+    }
+
     private void calculateCalories() {
+
         long currentHeartbeat = System.currentTimeMillis();
         double timeDiffSec = (currentHeartbeat - mLastHeartBeat) / 1000.0;
         mLastHeartBeat = currentHeartbeat;

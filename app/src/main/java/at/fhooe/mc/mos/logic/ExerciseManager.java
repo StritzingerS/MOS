@@ -76,7 +76,9 @@ public class ExerciseManager implements PedometerObserver {
             long currentTime = System.currentTimeMillis();
             mCalories+= mCaloriesPerStep + (currentTime-mLastStepTime)/1000.0/60.0/60.0*mWeight;
             Log.i(TAG, "Step Calories: " + mCalories);
-            mView.currentCalories((int)mCalories);
+            if(mHeartRateManager == null) {
+                mView.currentCalories((int) mCalories);
+            }
         }else {
             mLastStepTime = System.currentTimeMillis();
         }
@@ -86,12 +88,18 @@ public class ExerciseManager implements PedometerObserver {
         // listen for steps
         mPedometer.addObserver(this);
         mStartTime = System.currentTimeMillis();
+        if(mHeartRateManager != null) {
+            mHeartRateManager.setCountCalories(true);
+        }
     }
 
     public void stopCounter() {
         // stop listening
         mPedometer.removeObserver(this);
         mStopTime = System.currentTimeMillis();
+        if(mHeartRateManager != null) {
+            mHeartRateManager.setCountCalories(false);
+        }
     }
 
     public void reset() {
