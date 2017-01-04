@@ -42,4 +42,8 @@ public class AltitudeManager implements AltitudeObserver {
         mAltitude = altitude;
         mView.currentAltitude(altitude);
     }
+
+    public float getAltitude(){
+        return mAltitude;
+    }
 }

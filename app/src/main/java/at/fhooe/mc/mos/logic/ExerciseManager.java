@@ -25,6 +25,7 @@ public class ExerciseManager implements PedometerObserver {
     private Pedometer mPedometer;
     private DatabaseReference mDatabaseRef;
     private HeartRateManager mHeartRateManager;
+    private AltitudeManager mAltitudeManager;
     private int mWeight;
 
     private int mStepGoal;
@@ -32,56 +33,91 @@ public class ExerciseManager implements PedometerObserver {
     private long mStartTime;
     private long mStopTime;
     private double mStrideLength;       //in meters
-    private double mRunningDistance;
+    private double mRunningDistance;    //in meters
+    private double mLastDistance;       //in meters (used for altitude calorie calculation)
+    private double mEquivalentDistance; //in meters
     private double mCalories;           // in kilo calories
     private double mCaloriesPerStep;    // in kilo calories
+    private double mCaloriesWithAltitude; // in kilo calories
     private long mLastStepTime;
+    private float mLastAltitude;
+    private float mPace;                // in sec/km
+    private float mEquivalentPace;      // in sec/km
+
 
     public ExerciseManager(PedometerView view, Context _context, Pedometer pedometer, DatabaseReference databaseRef) {
         mView = view;
         mPedometer = pedometer;
         mDatabaseRef = databaseRef;
 
-        mStepCount = 0;
-        mRunningDistance=0.0;
-        mLastStepTime=0;
-        mCalories =0.0;
+        reset();
 
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(_context);
         mStepGoal = Integer.parseInt(sharedPreferences.getString("keyMaxSteps", "100"));
 
         //load settings for VO2max calculation
-        int weight = Integer.parseInt(sharedPreferences.getString("keyWeight", "80"));
+        mWeight = Integer.parseInt(sharedPreferences.getString("keyWeight", "80"));
         int age = Integer.parseInt(sharedPreferences.getString("keyAge", "20"));
-        int mWeight = Integer.parseInt(sharedPreferences.getString("keyHeight", "180"));
+        int height = Integer.parseInt(sharedPreferences.getString("keyHeight", "180"));
         String gender = sharedPreferences.getString("keyGender", "Male");
         if (gender.compareTo("Female") == 0) {
-            mStrideLength = -0.001*age + 1.058*mWeight/100-0.002*weight-0.129;
+            mStrideLength = -0.001*age + 1.058*height/100-0.002*mWeight-0.129;
         } else {
-            mStrideLength = -0.002*age + 0.76*mWeight/100-0.001*weight+0.327;
+            mStrideLength = -0.002*age + 0.76*height/100-0.001*mWeight+0.327;
         }
-        mCaloriesPerStep = weight*9.81*0.03/0.60/4.1868/1000 ; //weight * gravity * vertical oszialltion / vertical to horzontal movment ratio
+        mCaloriesPerStep = mWeight*9.81*0.03/0.60/4.1868/1000 ; //weight * gravity * vertical oszialltion / vertical to horzontal movment ratio
     }
 
+    private float getSlopeEnergyCost(float gradient){
+        if(Math.abs(gradient) < 0.45f) {
+            return 40.3833f * (float) Math.pow(gradient, 2) + 16.675f * gradient + 3.69867f;
+        }
+        else{
+            return 4.1f;
+        }
+    }
 
     @Override
     public void stepDetected() {
         mView.currentSteps(++mStepCount);
-        if( (mStepCount & 1) == 0){
-            mRunningDistance+=mStrideLength;
-            mView.currentDistance(((int)(mRunningDistance/10))/100.0); //return in kilometers
-        }
+        long currentTime = System.currentTimeMillis();
 
+        //Calories
         if(mLastStepTime!= 0){
-            long currentTime = System.currentTimeMillis();
-            mCalories+= mCaloriesPerStep + (currentTime-mLastStepTime)/1000.0/60.0/60.0*mWeight;
-            Log.i(TAG, "Step Calories: " + mCalories);
+            mCalories+= mCaloriesPerStep + (currentTime-mLastStepTime)/1000.0/60.0/60.0*mWeight; //add CaloriesPerStep BMR
             if(mHeartRateManager == null) {
                 mView.currentCalories((int) mCalories);
             }
         }else {
-            mLastStepTime = System.currentTimeMillis();
+            mLastStepTime = currentTime;
         }
+
+        //use only every second step for a full stride
+        if( (mStepCount & 1) == 0){
+
+            //Distance and Pace
+            mRunningDistance+=mStrideLength;
+            mPace= ((currentTime-mStartTime)/1000)/(float)(mRunningDistance/1000);
+            mView.currentDistance(((int)(mRunningDistance/10))/100.0); //return in kilometers
+            mView.currentPace(mPace);
+
+
+            //Equivalent Distance and Pace
+            if(mAltitudeManager != null ){
+                float currentAltitude = mAltitudeManager.getAltitude();
+                if(mLastAltitude != 0.0f || mLastDistance != 0.0f){
+                    float gradient = (currentAltitude-mLastAltitude)/(float)mStrideLength ;
+                    mCaloriesWithAltitude += mWeight * getSlopeEnergyCost(gradient)*(mRunningDistance-mLastDistance)/4186.8;
+                    mEquivalentDistance=mCaloriesWithAltitude*4.1868/(mWeight*4.1)*1000;
+                    mEquivalentPace=((currentTime-mStartTime)/1000)/(float)(mEquivalentDistance/1000);
+                    mView.currentEquivalentDistance(((int)(mEquivalentDistance/10))/100.0);
+                    mView.currentEquivalentPace(mEquivalentPace);
+                }
+                mLastAltitude = currentAltitude;
+                mLastDistance = mRunningDistance;
+            }
+        }
+        mLastStepTime=currentTime;
     }
 
     public void startCounting() {
@@ -105,7 +141,14 @@ public class ExerciseManager implements PedometerObserver {
     public void reset() {
         mStepCount = 0;
         mRunningDistance=0.0;
+        mLastDistance=0;
+        mEquivalentDistance=0.0;
+        mCalories =0.0;
+        mCaloriesWithAltitude=0.0;
         mLastStepTime=0;
+        mLastAltitude=0;
+        mPace=0;
+        mEquivalentPace=0;
     }
 
     public void saveData() {
@@ -114,6 +157,8 @@ public class ExerciseManager implements PedometerObserver {
         exercise.setmStepCount(mStepCount);
         exercise.setmDuration(mStopTime-mStartTime);
         exercise.setmStartTime(mStartTime);
+        exercise.setmRunningDistance(mRunningDistance);
+        exercise.setmPace(mPace);
 
         if(mHeartRateManager != null){
             exercise.setmCalorieCount((int)mHeartRateManager.getCalories());
@@ -121,6 +166,11 @@ public class ExerciseManager implements PedometerObserver {
             exercise.setmMaxHeartRate(mHeartRateManager.getmHRMax());
             exercise.setmMinHeartRate(mHeartRateManager.getmHRMin());
             exercise.setmTrimp(mHeartRateManager.getTrimp()*(mStopTime-mStartTime)/1000.0/60.0);
+        }else if (mAltitudeManager != null) {
+            exercise.setmEquivalentDistance(mEquivalentDistance);
+            exercise.setmEquivalentPace(mEquivalentPace);
+            exercise.setmCalorieCount((int)mCalories);
+            exercise.setmCaloriesWithAltitude(mCaloriesWithAltitude);
         }else{
             exercise.setmCalorieCount((int)mCalories);
         }
@@ -140,5 +190,8 @@ public class ExerciseManager implements PedometerObserver {
 
     public void setHeartRateManager(HeartRateManager heartRateManager){
         mHeartRateManager = heartRateManager;
+    }
+    public void setAltitudeManager(AltitudeManager altitudeManager){
+        mAltitudeManager = altitudeManager;
     }
 }
