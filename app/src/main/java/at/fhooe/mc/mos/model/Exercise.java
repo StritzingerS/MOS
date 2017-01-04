@@ -19,6 +19,11 @@ public class Exercise {
     private long mDuration;
     private long mStartTime;
     private double mTrimp;
+    private double mRunningDistance;
+    private float mPace;
+    private double mEquivalentDistance;
+    private float mEquivalentPace;
+    private double mCaloriesWithAltitude;
 
     public Exercise() {
         // Default constructor required for calls to DataSnapshot.getValue(ListItem.class)
@@ -54,6 +59,22 @@ public class Exercise {
 
     public double getmTrimp() {        return mTrimp;    }
     public void setmTrimp(double mTrimp) {        this.mTrimp = mTrimp;    }
+
+    public double getmRunningDistance() { return mRunningDistance; }
+    public void setmRunningDistance(double mRunningDistance) { this.mRunningDistance = mRunningDistance;}
+
+    public float getmPace() { return mPace; }
+    public void setmPace(float mPace) { this.mPace = mPace; }
+
+    public double getmEquivalentDistance() { return mEquivalentDistance; }
+    public void setmEquivalentDistance(double mEquivalentDistance) { this.mEquivalentDistance = mEquivalentDistance; }
+
+    public float getmEquivalentPace() { return mEquivalentPace; }
+    public void setmEquivalentPace(float mEquivalentPace) { this.mEquivalentPace = mEquivalentPace; }
+
+    public double getmCaloriesWithAltitude() { return mCaloriesWithAltitude; }
+    public void setmCaloriesWithAltitude(double mCaloriesWithAltitude) { this.mCaloriesWithAltitude = mCaloriesWithAltitude; }
+
 
     @Exclude
     public Map<String, Object> toMap() {

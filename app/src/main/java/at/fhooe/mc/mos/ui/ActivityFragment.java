@@ -58,10 +58,13 @@ public class ActivityFragment extends Fragment implements PedometerView, HeartRa
     private AltitudeManager mAltitudeManager;
     private TextView mTVCalories;
     private TextView mTVDistance;
+    private TextView mTVPace;
     private TextView mTVHeartRate;
     private TextView mTVAvgHeartRate;
     private TextView mTVHrMaxPercentage;
     private TextView mTVAltitude;
+    private TextView mTVEquivalentDistance;
+    private TextView mTVEquivalentPace;
 
     private static final int REQUEST_ENABLE_BT = 1;
     private static final int REQUEST_GET_DEVICE = 2;
@@ -152,6 +155,7 @@ public class ActivityFragment extends Fragment implements PedometerView, HeartRa
 
         mExerciseManager = new ExerciseManager(this, getContext(), AndroidPedometer.getInstance(getActivity().getApplicationContext()), databaseRef);
         mAltitudeManager = new AltitudeManager(this, getContext(), AndroidBarometer.getInstance(getActivity().getApplicationContext()));
+        mExerciseManager.setAltitudeManager(mAltitudeManager);
     }
 
     @Override
@@ -176,10 +180,13 @@ public class ActivityFragment extends Fragment implements PedometerView, HeartRa
         //TextViews
         mTVCalories = (TextView) mView.findViewById(R.id.tv_activity_calories);
         mTVDistance = (TextView) mView.findViewById(R.id.tv_activity_distance);
+        mTVPace = (TextView) mView.findViewById(R.id.tv_activity_pace);
         mTVHeartRate = (TextView) mView.findViewById(R.id.tv_activity_heartrate);
         mTVAvgHeartRate = (TextView) mView.findViewById(R.id.tv_activity_average_heartrate);
         mTVHrMaxPercentage = (TextView) mView.findViewById(R.id.tv_activity_max_heartrate);
         mTVAltitude = (TextView) mView.findViewById(R.id.tv_activity_altitude);
+        mTVEquivalentDistance = (TextView) mView.findViewById(R.id.tv_activity_EquivalentDistance);
+        mTVEquivalentPace = (TextView) mView.findViewById(R.id.tv_activity_EquivalentPace);
 
         // Buttons
         mBtnStart = (Button) mView.findViewById(R.id.btn_activity_start);
@@ -287,12 +294,15 @@ public class ActivityFragment extends Fragment implements PedometerView, HeartRa
 
         // reset view
         mCircleView.setValueAnimated(0);
-        mTVCalories.setText(String.valueOf(0));
-        mTVDistance.setText(String.valueOf(0)+"km");
+        mTVCalories.setText("-");
+        mTVDistance.setText("-");
+        mTVPace.setText("-");
         mTVAvgHeartRate.setText("-");
         mTVHrMaxPercentage.setText("-");
         mTVHeartRate.setText("-");
         mTVAltitude.setText("-");
+        mTVEquivalentDistance.setText("-");
+        mTVEquivalentPace.setText("-");
     }
 
     // Callback for Activities started with a specific request Code.
@@ -379,13 +389,20 @@ public class ActivityFragment extends Fragment implements PedometerView, HeartRa
     @Override
     public void currentCalories(int currentCalories) {
         Log.i(TAG, "Calories: " + currentCalories);
-        mTVCalories.setText(String.valueOf(currentCalories));
+        mTVCalories.setText(String.valueOf(currentCalories)+" kcal");
     }
 
     @Override
     public void currentDistance(double currentDistance) {
         Log.i(TAG, "Distance: " + currentDistance);
-        mTVDistance.setText(String.valueOf(currentDistance)+"km");
+        mTVDistance.setText(String.valueOf(currentDistance)+" km");
+    }
+
+    @Override
+    public void currentPace(float currentPace){
+        int second =(int)(currentPace % 60);
+        int minute = (int)(currentPace / 60);
+        mTVPace.setText(String.format("%d:%02d", minute, second)+" min/km");
     }
 
     @Override
@@ -439,7 +456,18 @@ public class ActivityFragment extends Fragment implements PedometerView, HeartRa
 
     @Override
     public void currentAltitude(float altitude) {
-        // no commas
-        mTVAltitude.setText(String.valueOf((int) altitude));
+        mTVAltitude.setText(String.valueOf( ((int)(altitude*10))/10.0)+" m");
     }
+    @Override
+    public void currentEquivalentDistance(double currentEquivalentDistance){
+        mTVEquivalentDistance.setText(String.valueOf(currentEquivalentDistance)+" km");
+    }
+    @Override
+    public void currentEquivalentPace(float currentEquivalentPace){
+        int second =(int)(currentEquivalentPace % 60);
+        int minute = (int)(currentEquivalentPace / 60);
+        mTVEquivalentPace.setText(String.format("%d:%02d", minute, second)+" min/km");
+    }
+
+
 }

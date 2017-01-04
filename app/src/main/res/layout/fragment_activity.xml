@@ -215,6 +215,35 @@
             <!--android:textAppearance="@android:style/TextAppearance.Material.Headline" -->
         </LinearLayout>
 
+        <!-- Pace Textview -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:text="Pace: "
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/tv_activity_pace_text"
+                android:layout_weight="1"
+                android:textAppearance="@android:style/TextAppearance.Large"
+                android:textColor="?attr/colorControlActivated"
+                android:textSize="18sp" />
+
+            <TextView
+                android:text="-"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/tv_activity_pace"
+                android:layout_weight="1"
+                android:textAppearance="@android:style/TextAppearance.Large"
+                android:textAlignment="textEnd"
+                android:fontFamily="sans-serif"
+                android:textSize="18sp" />
+            <!--android:textAppearance="@android:style/TextAppearance.Material.Headline" -->
+        </LinearLayout>
+
         <!-- Altitude Textview -->
         <LinearLayout
             android:layout_width="match_parent"
@@ -244,6 +273,63 @@
             <!--android:textAppearance="@android:style/TextAppearance.Material.Headline" -->
         </LinearLayout>
 
+        <!-- Equivalent Distance Textview -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:text="Equivalent Distance: "
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/tv_activity_EquivalentDistance_text"
+                android:layout_weight="1"
+                android:textAppearance="@android:style/TextAppearance.Large"
+                android:textColor="?attr/colorControlActivated"
+                android:textSize="18sp" />
+
+            <TextView
+                android:text="-"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/tv_activity_EquivalentDistance"
+                android:layout_weight="1"
+                android:textAppearance="@android:style/TextAppearance.Large"
+                android:textAlignment="textEnd"
+                android:fontFamily="sans-serif"
+                android:textSize="18sp" />
+            <!--android:textAppearance="@android:style/TextAppearance.Material.Headline" -->
+        </LinearLayout>
+
+        <!-- Equivalent Pace Textview -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:text="Equivalent Pace: "
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/tv_activity_EquivalentPace_text"
+                android:layout_weight="1"
+                android:textAppearance="@android:style/TextAppearance.Large"
+                android:textColor="?attr/colorControlActivated"
+                android:textSize="18sp" />
+
+            <TextView
+                android:text="-"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/tv_activity_EquivalentPace"
+                android:layout_weight="1"
+                android:textAppearance="@android:style/TextAppearance.Large"
+                android:textAlignment="textEnd"
+                android:fontFamily="sans-serif"
+                android:textSize="18sp" />
+            <!--android:textAppearance="@android:style/TextAppearance.Material.Headline" -->
+        </LinearLayout>
     </LinearLayout>
 
 </LinearLayout>
