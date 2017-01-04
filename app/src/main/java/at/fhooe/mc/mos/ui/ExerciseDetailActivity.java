@@ -20,7 +20,7 @@ import com.google.firebase.database.ValueEventListener;
 
 import at.fhooe.mc.mos.R;
 import at.fhooe.mc.mos.model.Exercise;
-import at.fhooe.mc.mos.utils.MillisHelper;
+import at.fhooe.mc.mos.utils.TimeHelper;
 
 public class ExerciseDetailActivity extends AppCompatActivity {
 
@@ -33,6 +33,8 @@ public class ExerciseDetailActivity extends AppCompatActivity {
     private TextView mTvCalories;
     private TextView mTvHeartRate;
     private TextView mTvTRIMP;
+    private TextView mTvPace;
+    private TextView mTvDistance;
 
     private View mContent;
     private ProgressBar mProgressBarLoading;
@@ -59,7 +61,8 @@ public class ExerciseDetailActivity extends AppCompatActivity {
         mTvCalories = (TextView) findViewById(R.id.tv_exercisedetail_calories);
         mTvHeartRate = (TextView) findViewById(R.id.tv_exercisedetail_heartRate);
         mTvTRIMP = (TextView) findViewById(R.id.tv_exercisedetail_trimp);
-
+        mTvPace = (TextView) findViewById(R.id.tv_exercisedetail_pace);
+        mTvDistance = (TextView) findViewById(R.id.tv_exercisedetail_distance);
 
         Intent intent = getIntent();
         String exerciseKey = intent.getStringExtra(StatisticsFragment.EXERCISE_KEY);
@@ -101,13 +104,15 @@ public class ExerciseDetailActivity extends AppCompatActivity {
     }
 
     private void showExercise(Exercise e) {
-        mTvDate.setText(MillisHelper.millisToLocaleString(e.getmStartTime()));
-        mTvDuration.setText(MillisHelper.millisToDuration(e.getmDuration()));
+        mTvDate.setText(TimeHelper.millisToLocaleString(e.getmStartTime()));
+        mTvDuration.setText(TimeHelper.millisToDuration(e.getmDuration()));
         mTvSteps.setText(String.valueOf(e.getmStepCount()));
         mTvGoal.setText(String.valueOf(e.getmStepGoal()));
-        mTvCalories.setText(String.valueOf(e.getmStepGoal()));
+        mTvCalories.setText(String.valueOf(e.getmCalorieCount())+ "/" + String.valueOf((int)e.getmCaloriesWithAltitude()));
         mTvHeartRate.setText(String.valueOf(e.getmMinHeartRate()) + "/" + String.valueOf(e.getmMaxHeartRate()) + "/" + String.valueOf(e.getmAvgHeartRate()));
         mTvTRIMP.setText(String.valueOf(e.getmTrimp()));
+        mTvPace.setText(TimeHelper.secondsToDuration((long)e.getmPace()) + "/" + TimeHelper.secondsToDuration((long)e.getmEquivalentPace()));
+        mTvDistance.setText(String.valueOf((int)e.getmRunningDistance()) + "/" + String.valueOf((int)e.getmEquivalentDistance()));
 
         mProgressBarLoading.setVisibility(View.GONE);
         mContent.setVisibility(View.VISIBLE);

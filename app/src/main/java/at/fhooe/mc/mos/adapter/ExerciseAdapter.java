@@ -10,7 +10,7 @@ import java.util.List;
 
 import at.fhooe.mc.mos.R;
 import at.fhooe.mc.mos.model.Exercise;
-import at.fhooe.mc.mos.utils.MillisHelper;
+import at.fhooe.mc.mos.utils.TimeHelper;
 
 /**
  * Adapter for statistics recyclerView
@@ -37,9 +37,9 @@ public class ExerciseAdapter extends RecyclerView.Adapter<ExerciseAdapter.Custom
         Exercise exercise = mExercises.get(i);
 
         //Setting text view title
-        customViewHolder.mTvStartTime.setText(MillisHelper.millisToLocaleString(exercise.getmStartTime()));
+        customViewHolder.mTvStartTime.setText(TimeHelper.millisToLocaleString(exercise.getmStartTime()));
         customViewHolder.mTvDistance.setText(String.valueOf(exercise.getmStepCount()));
-        customViewHolder.mTvDuration.setText(MillisHelper.millisToDuration(exercise.getmDuration()));
+        customViewHolder.mTvDuration.setText(TimeHelper.millisToDuration(exercise.getmDuration()));
     }
 
     @Override

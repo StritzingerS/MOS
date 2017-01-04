@@ -36,6 +36,7 @@ import at.fhooe.mc.mos.hardware.BluetoothService;
 import at.fhooe.mc.mos.logic.AltitudeManager;
 import at.fhooe.mc.mos.logic.HeartRateManager;
 import at.fhooe.mc.mos.logic.ExerciseManager;
+import at.fhooe.mc.mos.utils.TimeHelper;
 import at.grabner.circleprogress.CircleProgressView;
 import at.grabner.circleprogress.TextMode;
 
@@ -400,9 +401,7 @@ public class ActivityFragment extends Fragment implements PedometerView, HeartRa
 
     @Override
     public void currentPace(float currentPace){
-        int second =(int)(currentPace % 60);
-        int minute = (int)(currentPace / 60);
-        mTVPace.setText(String.format("%d:%02d", minute, second)+" min/km");
+        mTVPace.setText(TimeHelper.secondsToDuration((long)currentPace));
     }
 
     @Override
@@ -464,9 +463,8 @@ public class ActivityFragment extends Fragment implements PedometerView, HeartRa
     }
     @Override
     public void currentEquivalentPace(float currentEquivalentPace){
-        int second =(int)(currentEquivalentPace % 60);
-        int minute = (int)(currentEquivalentPace / 60);
-        mTVEquivalentPace.setText(String.format("%d:%02d", minute, second)+" min/km");
+        mTVEquivalentPace.setText(TimeHelper.secondsToDuration((long)currentEquivalentPace));
+
     }
 
 
