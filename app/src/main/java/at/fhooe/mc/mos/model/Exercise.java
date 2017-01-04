@@ -20,6 +20,8 @@ public class Exercise {
     private long mStartTime;
     private double mTrimp;
 
+    private String mKey;
+
     public Exercise() {
         // Default constructor required for calls to DataSnapshot.getValue(ListItem.class)
     }
@@ -62,4 +64,11 @@ public class Exercise {
         return result;
     }
 
+    public String getmKey() {
+        return mKey;
+    }
+
+    public void setmKey(String mKey) {
+        this.mKey = mKey;
+    }
 }

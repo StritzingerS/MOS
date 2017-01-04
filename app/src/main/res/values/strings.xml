@@ -9,6 +9,7 @@
     <string name="drawer_close">Close</string>
     <string name="fragment_activity_title">Activity</string>
     <string name="activity_settings_title">Settings</string>
+    <string name="activity_exercisedetails_title">Exercise details</string>
 
     <!-- settings page -->
     <string name="settings_steps_title">Steps</string>

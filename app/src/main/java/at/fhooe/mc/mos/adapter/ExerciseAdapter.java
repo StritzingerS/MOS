@@ -47,6 +47,9 @@ public class ExerciseAdapter extends RecyclerView.Adapter<ExerciseAdapter.Custom
         return (null != mExercises ? mExercises.size() : 0);
     }
 
+    public Exercise getItemAtPosition(int position) {
+        return mExercises.get(position);
+    }
 
     class CustomViewHolder extends RecyclerView.ViewHolder {
         protected TextView mTvStartTime;
