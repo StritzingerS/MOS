@@ -61,4 +61,5 @@ public class Exercise {
         result.put("mStepCount", mStepCount);
         return result;
     }
+
 }

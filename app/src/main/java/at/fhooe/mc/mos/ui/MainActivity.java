@@ -122,7 +122,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
                 fragmentClass = ActivityFragment.class;
                 break;
             case R.id.nav_statistics:
-                // fragmentClass = SecondFragment.class;
+                fragmentClass = StatisticsFragment.class;
                 break;
             case R.id.nav_settings:
                 fragmentClass = SettingsFragment.class;
