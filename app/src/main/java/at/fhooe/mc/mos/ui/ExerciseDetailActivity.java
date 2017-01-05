@@ -110,7 +110,7 @@ public class ExerciseDetailActivity extends AppCompatActivity {
         mTvGoal.setText(String.valueOf(e.getmStepGoal()));
         mTvCalories.setText(String.valueOf(e.getmCalorieCount())+ "/" + String.valueOf((int)e.getmCaloriesWithAltitude()));
         mTvHeartRate.setText(String.valueOf(e.getmMinHeartRate()) + "/" + String.valueOf(e.getmMaxHeartRate()) + "/" + String.valueOf(e.getmAvgHeartRate()));
-        mTvTRIMP.setText(String.valueOf(e.getmTrimp()));
+        mTvTRIMP.setText(String.valueOf(((int)(e.getmTrimp()*100))/100.0));
         mTvPace.setText(TimeHelper.secondsToDuration((long)e.getmPace()) + "/" + TimeHelper.secondsToDuration((long)e.getmEquivalentPace()));
         mTvDistance.setText(String.valueOf((int)e.getmRunningDistance()) + "/" + String.valueOf((int)e.getmEquivalentDistance()));
 
