@@ -209,7 +209,7 @@ public class ActivityFragment extends Fragment implements PedometerView, HeartRa
                 .getDefaultSharedPreferences(getContext());
 
         // SharedPreferences prefs = getContext().getSharedPreferences(SettingsActivity.MY_PREFS, getContext().MODE_PRIVATE);
-        int maxSteps = Integer.parseInt(prefs.getString("keyMaxSteps", "0"));
+        int maxSteps = Integer.parseInt(prefs.getString("keySteps", "0"));
         if (maxSteps == 0) {
             maxSteps = 100;
         }

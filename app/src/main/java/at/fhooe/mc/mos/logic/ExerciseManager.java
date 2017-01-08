@@ -53,7 +53,7 @@ public class ExerciseManager implements PedometerObserver {
         reset();
 
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(_context);
-        mStepGoal = Integer.parseInt(sharedPreferences.getString("keyMaxSteps", "100"));
+        mStepGoal = Integer.parseInt(sharedPreferences.getString("keySteps", "1000"));
 
         //load settings for VO2max calculation
         mWeight = Integer.parseInt(sharedPreferences.getString("keyWeight", "80"));
@@ -160,18 +160,20 @@ public class ExerciseManager implements PedometerObserver {
         exercise.setmRunningDistance(mRunningDistance);
         exercise.setmPace(mPace);
 
+        if (mAltitudeManager != null) {
+            exercise.setmEquivalentDistance(mEquivalentDistance);
+            exercise.setmEquivalentPace(mEquivalentPace);
+            exercise.setmCalorieCount((int)mCalories);
+            exercise.setmCaloriesWithAltitude(mCaloriesWithAltitude);
+        }
         if(mHeartRateManager != null){
             exercise.setmCalorieCount((int)mHeartRateManager.getCalories());
             exercise.setmAvgHeartRate((int)mHeartRateManager.getAvgHeartRate());
             exercise.setmMaxHeartRate(mHeartRateManager.getmHRMax());
             exercise.setmMinHeartRate(mHeartRateManager.getmHRMin());
             exercise.setmTrimp(mHeartRateManager.getTrimp()*(mStopTime-mStartTime)/1000.0/60.0);
-        }else if (mAltitudeManager != null) {
-            exercise.setmEquivalentDistance(mEquivalentDistance);
-            exercise.setmEquivalentPace(mEquivalentPace);
-            exercise.setmCalorieCount((int)mCalories);
-            exercise.setmCaloriesWithAltitude(mCaloriesWithAltitude);
-        }else{
+        }
+        if (mHeartRateManager == null && mAltitudeManager == null){
             exercise.setmCalorieCount((int)mCalories);
         }
 
